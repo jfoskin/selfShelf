@@ -19,7 +19,6 @@ db.on('connected', ()=> console.log(`Database has successfully connected`))
 db.on('disconnected', ()=> console.log(`Database has disconnected`))
 
 
-
 //Middleware
 
 
