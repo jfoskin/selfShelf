@@ -8,6 +8,8 @@ const app = express()
 const PORT = process.env.PORT
 const uri = process.env.DATABASEURL
 
+const Book = require('./models/BookModel')
+
 //Database connection
 
 mongoose.connect(uri)
@@ -21,7 +23,7 @@ db.on('disconnected', ()=> console.log(`Database has disconnected`))
 
 //Middleware
 
-
+app.use(express.urlencoded({extended: true}))
 
 //Routes
 app.get('/', (req,res)=>{
@@ -29,7 +31,14 @@ app.get('/', (req,res)=>{
 })
 
 app.post('/book', (req, res)=>{
-    res.send(`books recieved`)
+
+    if (req.body.completed === 'on'){
+        req.body.completed = true
+    }else{
+        req.body.completed = false
+    }
+
+    res.send(req.body)
 })
 
 //Ports
