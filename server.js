@@ -1,4 +1,4 @@
-// Dependancies
+// Dependencies
 
 require('dotenv').config()
 const express = require('express')
@@ -28,6 +28,13 @@ app.use(express.urlencoded({ extended: true }))
 //Routes
 app.get('/', (req, res) => {
     res.status(200).send(`welcome to my library where I reflect on the books I have read and take suggestions `)
+})
+
+app.get('/books', async (req, res) => {
+
+    const allBooks = await Book.find({})
+
+    res.send(allBooks)
 })
 
 app.post('/book', (req, res) => {
