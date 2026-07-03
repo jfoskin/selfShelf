@@ -24,17 +24,18 @@ db.on('disconnected', () => console.log(`Database has disconnected`))
 //Middleware
 
 app.use(express.urlencoded({ extended: true }))
+app.set("view engine", "ejs")
 
 //Routes
 app.get('/', (req, res) => {
-    res.status(200).send(`welcome to my library where I reflect on the books I have read and take suggestions `)
+    res.status(200).render("home.ejs")
 })
 
 app.get('/books', async (req, res) => {
 
     const allBooks = await Book.find({})
 
-    res.send(allBooks)
+    res.render("index.ejs")
 })
 
 app.post('/book', (req, res) => {
