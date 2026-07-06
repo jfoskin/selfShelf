@@ -38,6 +38,10 @@ app.get('/books', async (req, res) => {
     res.render("index.ejs")
 })
 
+app.get('/books/new', (req, res) => {
+    res.render('new.ejs')
+})
+
 app.post('/book', (req, res) => {
 
     if (req.body.completed === 'on') {
