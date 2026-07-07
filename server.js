@@ -24,6 +24,7 @@ db.on('disconnected', () => console.log(`Database has disconnected`))
 //Middleware
 
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static("public"));
 app.set("view engine", "ejs")
 
 //Routes
@@ -32,32 +33,43 @@ app.get('/', (req, res) => {
 })
 
 app.get('/books', async (req, res) => {
+    // res.render("index.ejs")
+    try {
+        const allBooks = await Book.find({})
+        res.render("index.ejs", {
+            books: allBooks
+        });
 
-    const allBooks = await Book.find({})
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error)
+    }
 
-    res.render("index.ejs")
 })
 
 app.get('/books/new', (req, res) => {
     res.render('new.ejs')
 })
 
-app.post('/book', (req, res) => {
-
+app.post('/books', (req, res) => {
+    // Checking for completed "checke off" book.
     if (req.body.completed === 'on') {
-        req.body.completed = true
+        req.body.completed = true;
     } else {
-        req.body.completed = false
+        req.body.completed = false;
     }
 
-    Book.create(req.body).then((createdBook) => {
-        console.log(`Book was created`)
-    }).catch(err => {
-        console.log(err, `<<<<<========= ERROR!!!!`)
-    })
+    Book.create(req.body)
+        .then(createdBook => {
+            console.log('Book has successfuly been created!')
+            console.log(req.body)
+            res.redirect("/books")
+        }).catch(error => {
+            console.error('Error Creating Book!')
+            res.status(500).send("ISSUE CREATING BOOK!")
+        })
 
-    res.send(req.body)
-})
+});
 
 //Ports
 app.listen(PORT, () => {

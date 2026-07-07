@@ -9,19 +9,22 @@
 
 <body>
     <h1>Reading List</h1>
-    <!-- <ul>
+
+    <ul>
         <% books.forEach(book=> { %>
             <li>
-                <a href="/books/<%=book._id; %>" >
+                <a href="/books/<%=book._id; %>">
                     <%=book.title; %>
                 </a>
-                <form action="/books/<%= book.id %>?_method=DELETE" method="POST">
-                    <input type="submit" value="DELETE" />
+                <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
+                    <input type="submit" value="DELETE">
                 </form>
                 <a href="/books/<%=book._id %>/edit">Edit</a>
+
+                <BR></BR>
             </li>
             <% }) %>
-    </ul> -->
+    </ul>
 
     <nav>
         <a href="/books/new">Add a New Book</a>
