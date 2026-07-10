@@ -28,10 +28,14 @@ app.use(express.static("public"));
 app.set("view engine", "ejs")
 
 //Routes
+
+//Home
 app.get('/', (req, res) => {
     res.status(200).render("home.ejs")
 })
 
+
+// Index
 app.get('/books', async (req, res) => {
     // res.render("index.ejs")
     try {
@@ -47,6 +51,8 @@ app.get('/books', async (req, res) => {
 
 })
 
+
+// New
 app.get('/books/new', (req, res) => {
     res.render('new.ejs')
 })
@@ -71,7 +77,11 @@ app.post('/books', (req, res) => {
 
 });
 
+// Delete
+// Update
+// Edit
 
+//Show
 app.get('/books/:id', async (req, res) => {
     try {
         let id = req.params.id
