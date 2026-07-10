@@ -71,6 +71,11 @@ app.post('/books', (req, res) => {
 
 });
 
+
+app.get('/books/:id', (req, res) => {
+    res.send('show book')
+})
+
 //Ports
 app.listen(PORT, () => {
     console.log(`Lstening to server on http://localhost:${PORT}`)
