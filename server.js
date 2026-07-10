@@ -72,8 +72,19 @@ app.post('/books', (req, res) => {
 });
 
 
-app.get('/books/:id', (req, res) => {
-    res.send('show book')
+app.get('/books/:id', async (req, res) => {
+    try {
+        let id = req.params.id
+
+        const book = await Book.findById(id)
+
+        res.render("show.ejs", {
+            book: book
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 //Ports
