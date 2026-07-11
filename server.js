@@ -57,6 +57,15 @@ app.get('/books/new', (req, res) => {
     res.render('new.ejs')
 })
 
+// Delete
+app.delete('/books/:id', async (req, res) => {
+
+})
+// Update
+
+
+//Create 
+
 app.post('/books', (req, res) => {
     // Checking for completed "checke off" book.
     if (req.body.completed === 'on') {
@@ -77,8 +86,6 @@ app.post('/books', (req, res) => {
 
 });
 
-// Delete
-// Update
 // Edit
 
 //Show
