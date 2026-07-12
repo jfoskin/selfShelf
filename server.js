@@ -3,6 +3,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 
 const app = express()
 const PORT = process.env.PORT
@@ -26,6 +27,7 @@ db.on('disconnected', () => console.log(`Database has disconnected`))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"));
 app.set("view engine", "ejs")
+app.use(methodOverride('_method'))
 
 //Routes
 
@@ -59,7 +61,13 @@ app.get('/books/new', (req, res) => {
 
 // Delete
 app.delete('/books/:id', async (req, res) => {
-
+    try {
+        const id = req.params.id
+        const bookToDelete = await Book.findByIdAndDelete(id)
+        res.redirect('/books')
+    } catch (error) {
+        console.log(error)
+    }
 })
 // Update
 
