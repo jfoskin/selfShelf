@@ -33,17 +33,16 @@
                 <ul class="shelf-row" aria-label="Bookshelf">
                     <% books.forEach(book=> { %>
                         <li class="shelf-slot">
-                            <a class="book-spine" data-pull-link href="/books/<%=book._id; %>" aria-label="Open <%=book.title; %>">
+                            <a
+                                class="book-spine"
+                                data-book-id="<%=book._id; %>"
+                                data-book-title="<%=book.title; %>"
+                                href="/books/<%=book._id; %>"
+                                aria-label="Open actions for <%=book.title; %>">
                                 <span class="spine-status"><%= book.completed ? 'DONE' : 'READING' %></span>
                                 <span class="spine-title"><%=book.title; %></span>
                                 <span class="spine-author"><%= book.author %></span>
                             </a>
-                            <div class="shelf-actions">
-                                <a class="btn btn-ghost btn-mini" href="/books/<%=book._id %>/edit">Edit</a>
-                                <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
-                                    <input class="btn btn-danger btn-mini" type="submit" value="Delete">
-                                </form>
-                            </div>
                         </li>
                     <% }) %>
                 </ul>
@@ -51,22 +50,66 @@
         </section>
     </main>
 
-    <script>
-        const pullLinks = document.querySelectorAll('[data-pull-link]');
+    <div id="book-action-modal" class="book-modal" hidden>
+        <div class="book-modal-backdrop" data-close-modal></div>
+        <section class="book-modal-card" role="dialog" aria-modal="true" aria-labelledby="book-modal-title">
+            <button type="button" class="modal-close" data-close-modal aria-label="Close popup">x</button>
+            <p class="eyebrow">Bookshelf Actions</p>
+            <h2 id="book-modal-title" class="modal-book-title"></h2>
+            <div class="modal-actions">
+                <a id="modal-edit-link" class="btn btn-primary" href="/books">Edit</a>
+                <form id="modal-delete-form" action="/books?_method=DELETE" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Delete">
+                </form>
+            </div>
+        </section>
+    </div>
 
-        pullLinks.forEach((link) => {
-            link.addEventListener('click', (event) => {
+    <script>
+        const bookSpines = document.querySelectorAll('[data-book-id]');
+        const modal = document.getElementById('book-action-modal');
+        const modalTitle = document.getElementById('book-modal-title');
+        const modalEditLink = document.getElementById('modal-edit-link');
+        const modalDeleteForm = document.getElementById('modal-delete-form');
+        const closeTargets = document.querySelectorAll('[data-close-modal]');
+
+        const closeModal = () => {
+            modal.hidden = true;
+            document.body.classList.remove('modal-open');
+        };
+
+        bookSpines.forEach((spine) => {
+            spine.addEventListener('click', (event) => {
                 if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
                     return;
                 }
 
                 event.preventDefault();
-                link.classList.add('pulling');
+                const bookId = spine.dataset.bookId;
+                const bookTitle = spine.dataset.bookTitle;
 
+                spine.classList.add('pulling');
                 setTimeout(() => {
-                    window.location.href = link.href;
+                    spine.classList.remove('pulling');
                 }, 220);
+
+                modalTitle.textContent = bookTitle;
+                modalEditLink.href = '/books/' + bookId + '/edit';
+                modalDeleteForm.action = '/books/' + bookId + '?_method=DELETE';
+
+                modal.hidden = false;
+                document.body.classList.add('modal-open');
             });
+        });
+
+        closeTargets.forEach((target) => {
+            target.addEventListener('click', closeModal);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.hidden) {
+                closeModal();
+            }
         });
     </script>
 

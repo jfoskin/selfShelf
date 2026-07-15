@@ -401,16 +401,6 @@ body.site-shell {
 .shelf-slot:nth-child(6n + 5) .book-spine { background: #2d4f8b; }
 .shelf-slot:nth-child(6n + 6) .book-spine { background: #3f6a22; }
 
-.shelf-actions {
-    display: flex;
-    gap: 0.35rem;
-    align-items: center;
-}
-
-.shelf-actions form {
-    margin: 0;
-}
-
 .btn-mini {
     padding: 0.28rem 0.46rem;
     font-size: 0.82rem;
@@ -473,6 +463,72 @@ body.site-shell {
     margin: 0;
 }
 
+.book-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.book-modal[hidden] {
+    display: none;
+}
+
+.book-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.48);
+}
+
+.book-modal-card {
+    position: relative;
+    width: min(480px, 92vw);
+    background: var(--card);
+    border: 2px solid var(--line);
+    box-shadow: 10px 10px 0 var(--line);
+    padding: 1rem;
+    z-index: 1;
+    animation: popIn 180ms ease-out;
+}
+
+.modal-close {
+    appearance: none;
+    border: 2px solid var(--line);
+    background: #fff;
+    width: 2rem;
+    height: 2rem;
+    font: inherit;
+    font-weight: 700;
+    line-height: 1;
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    cursor: pointer;
+}
+
+.modal-book-title {
+    margin: 0.35rem 0 0.9rem;
+    font-size: clamp(1.35rem, 3vw, 1.9rem);
+    line-height: 1.1;
+    padding-right: 2.2rem;
+}
+
+.modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.modal-actions form {
+    margin: 0;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
 @media (max-width: 768px) {
     .proof-grid {
         grid-template-columns: 1fr;
@@ -511,7 +567,7 @@ body.site-shell {
         height: 216px;
     }
 
-    .shelf-actions .btn {
+    .modal-actions .btn {
         width: auto;
     }
 
@@ -550,6 +606,18 @@ body.site-shell {
     to {
         opacity: 1;
         transform: translateX(0) rotateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.97) translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
