@@ -96,6 +96,17 @@ app.post('/books', (req, res) => {
 
 // Edit
 
+app.get('/books/:id/edit', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id)
+        res.render("edit.ejs", {
+            book: book
+        })
+    } catch (error) {
+
+    }
+})
+
 //Show
 app.get('/books/:id', async (req, res) => {
     try {
