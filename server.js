@@ -48,7 +48,7 @@ app.get('/books', async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        res.status(500).send(error)
+        res.status(500).send(`There was an error getting all books`)
     }
 
 })
@@ -62,11 +62,11 @@ app.get('/books/new', (req, res) => {
 // Delete
 app.delete('/books/:id', async (req, res) => {
     try {
-        const id = req.params.id
-        const bookToDelete = await Book.findByIdAndDelete(id)
+        const bookToDelete = await Book.findByIdAndDelete(req.params.id)
         res.redirect('/books')
     } catch (error) {
         console.log(error)
+        res.status(500).send(`Error deleting book`)
     }
 })
 // Update
