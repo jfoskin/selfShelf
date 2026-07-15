@@ -70,6 +70,23 @@ app.delete('/books/:id', async (req, res) => {
     }
 })
 // Update
+app.put('/books/:id', async (req, res) => {
+
+    if (req.body.completed === 'on') {
+        req.body.completed = true;
+    } else {
+        req.body.completed = false;
+    }
+
+    try {
+        const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec()
+
+        res.redirect(`/books/${req.params.id}`)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(`Book is not able to be updated`)
+    }
+})
 
 
 //Create 
@@ -98,12 +115,17 @@ app.post('/books', (req, res) => {
 
 app.get('/books/:id/edit', async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id)
+        const foundBook = await Book.findById(req.params.id)
+        if (!foundBook) {
+            return res.status(404).send(`Book not found!`)
+        }
+
         res.render("edit.ejs", {
-            book: book
+            book: foundBook
         })
     } catch (error) {
-
+        console.log(error)
+        res.status(500).send(`Issue showing the edit page`)
     }
 })
 
