@@ -4,8 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
-    <h1>Welcome to my Library App</h1>
+<body class="site-shell">
+    <header class="top-nav wrap">
+        <a class="brand" href="/">ShelfPilot</a>
+        <nav class="nav-links">
+            <a href="/books">Books</a>
+            <a href="/books/new">Add Book</a>
+        </nav>
+    </header>
+
+    <main class="wrap">
+        <section class="hero">
+            <p class="eyebrow">Built for focused readers</p>
+            <h1>Keep your reading list sharp and searchable.</h1>
+            <p class="hero-copy">Track books, mark progress, and keep your collection clean without spreadsheet chaos.</p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="/books">Browse Library</a>
+                <a class="btn btn-ghost" href="/books/new">Add New Book</a>
+            </div>
+            <div class="stats-card">
+                <p><span>Total books:</span> live from your database</p>
+                <p><span>Status:</span> completed or in progress</p>
+                <p><span>Flow:</span> add, edit, ship reading habits</p>
+            </div>
+        </section>
+
+        <section class="proof-grid">
+            <article>
+                <h2>Simple by design</h2>
+                <p>No bloat. Just the screens you need to manage your reading list fast.</p>
+            </article>
+            <article>
+                <h2>Honest workflow</h2>
+                <p>Add a title, update progress, and move on to your next book.</p>
+            </article>
+            <article>
+                <h2>Open stack</h2>
+                <p>Express + MongoDB powering a straightforward, hackable project.</p>
+            </article>
+        </section>
+
+        <section class="steps">
+            <h2>Your 3-step reading flow</h2>
+            <ol>
+                <li>Add a book in seconds</li>
+                <li>Update status while you read</li>
+                <li>Review your collection anytime</li>
+            </ol>
+        </section>
+    </main>
 </body>
 </html>

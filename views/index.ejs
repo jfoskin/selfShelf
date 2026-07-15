@@ -5,30 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
-<body>
-    <h1>Reading List</h1>
+<body class="site-shell">
+    <header class="top-nav wrap">
+        <a class="brand" href="/">ShelfPilot</a>
+        <nav class="nav-links">
+            <a href="/books/new">Add Book</a>
+        </nav>
+    </header>
 
-    <ul>
-        <% books.forEach(book=> { %>
-            <li>
-                <a href="/books/<%=book._id; %>">
-                    <%=book.title; %>
-                </a>
-                <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
-                    <input type="submit" value="DELETE">
-                </form>
-                <a href="/books/<%=book._id %>/edit">Edit</a>
+    <main class="wrap stack">
+        <section class="page-head">
+            <p class="eyebrow">Collection</p>
+            <h1>Reading List</h1>
+            <a class="btn btn-primary" href="/books/new">Add a New Book</a>
+        </section>
 
-                <BR></BR>
-            </li>
+        <ul class="book-list">
+            <% books.forEach(book=> { %>
+                <li class="book-row">
+                    <div>
+                        <a class="book-title" href="/books/<%=book._id; %>">
+                            <%=book.title; %>
+                        </a>
+                        <p class="book-meta">by <%= book.author %> | <%= book.completed ? 'Completed' : 'In progress' %></p>
+                    </div>
+                    <div class="row-actions">
+                        <a class="btn btn-ghost" href="/books/<%=book._id %>/edit">Edit</a>
+                        <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                    </div>
+                </li>
             <% }) %>
-    </ul>
-
-    <nav>
-        <a href="/books/new">Add a New Book</a>
-    </nav>
+        </ul>
+    </main>
 
 </body>
 

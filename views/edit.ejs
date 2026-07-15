@@ -5,17 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
   </head>
 
-  <body>
-    <h1>Edit Book</h1>
-    <form action="/books/<%=book._id%>?_method=PUT" method="POST">
-      Title: <input type="text" name="title" value="<%=book.title%>" /><br />
-      Author: <input type="text" name="author" value="<%=book.author%>" /><br />
-      Completed: <input type="checkbox" name="completed" <% if(book.completed
-      === true){ %> checked <% } %> />
-      <br />
-      <input type="submit" value="Submit Changes" />
-    </form>
+  <body class="site-shell">
+    <header class="top-nav wrap">
+      <a class="brand" href="/">ShelfPilot</a>
+      <nav class="nav-links">
+        <a href="/books">Books</a>
+      </nav>
+    </header>
+
+    <main class="wrap stack">
+      <section class="page-head">
+        <p class="eyebrow">Update</p>
+        <h1>Edit Book</h1>
+      </section>
+
+      <form class="book-form" action="/books/<%=book._id%>?_method=PUT" method="POST">
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title" value="<%=book.title%>" required />
+
+        <label for="author">Author</label>
+        <input id="author" type="text" name="author" value="<%=book.author%>" required />
+
+        <label class="check-row" for="completed">
+          <input id="completed" type="checkbox" name="completed" <% if(book.completed === true){ %> checked <% } %> />
+          Completed
+        </label>
+
+        <input class="btn btn-primary" type="submit" value="Submit Changes" />
+      </form>
+    </main>
   </body>
 </html>
