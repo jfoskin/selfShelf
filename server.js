@@ -109,6 +109,7 @@ app.get('/books/:id', async (req, res) => {
 
     } catch (error) {
         console.log(error)
+        res.status(500).send(`Not able to get book you are looking for`)
     }
 })
 
