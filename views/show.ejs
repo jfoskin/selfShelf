@@ -20,15 +20,25 @@
 		</header>
 
 		<main class="wrap stack">
-			<section class="page-head">
-				<p class="eyebrow">Details</p>
-				<h1><%=book.title %></h1>
-				<p class="detail-meta">Author: <strong><%= book.author%></strong></p>
-				<p class="detail-meta">Status: <strong><%= book.completed ? 'Completed' : 'In progress' %></strong></p>
-				<div class="cta-row">
-					<a class="btn btn-ghost" href="/books">Back to list</a>
-					<a class="btn btn-primary" href="/books/<%=book._id%>/edit">Edit book</a>
-				</div>
+			<section class="pulled-stage">
+				<article class="pulled-book">
+					<aside class="pulled-book-spine">
+						<p class="spine-label"><%=book.title %></p>
+					</aside>
+					<div class="pulled-book-cover">
+						<p class="eyebrow">Pulled From Shelf</p>
+						<h1><%=book.title %></h1>
+						<p class="detail-meta">Author: <strong><%= book.author%></strong></p>
+						<p class="detail-meta">Status: <strong><%= book.completed ? 'Completed' : 'In progress' %></strong></p>
+						<div class="cta-row">
+							<a class="btn btn-ghost" href="/books">Back to shelf</a>
+							<a class="btn btn-primary" href="/books/<%=book._id%>/edit">Edit book</a>
+							<form action="/books/<%=book.id %>?_method=DELETE" method="POST">
+								<input class="btn btn-danger" type="submit" value="Delete">
+							</form>
+						</div>
+					</div>
+				</article>
 			</section>
 		</main>
 	</body>

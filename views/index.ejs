@@ -21,30 +21,54 @@
 
     <main class="wrap stack">
         <section class="page-head">
-            <p class="eyebrow">Collection</p>
-            <h1>Reading List</h1>
+            <p class="eyebrow">Bookshelf</p>
+            <h1>Pick a Spine, Pull a Book</h1>
             <a class="btn btn-primary" href="/books/new">Add a New Book</a>
         </section>
 
-        <ul class="book-list">
-            <% books.forEach(book=> { %>
-                <li class="book-row">
-                    <div>
-                        <a class="book-title" href="/books/<%=book._id; %>">
-                            <%=book.title; %>
-                        </a>
-                        <p class="book-meta">by <%= book.author %> | <%= book.completed ? 'Completed' : 'In progress' %></p>
-                    </div>
-                    <div class="row-actions">
-                        <a class="btn btn-ghost" href="/books/<%=book._id %>/edit">Edit</a>
-                        <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                    </div>
-                </li>
-            <% }) %>
-        </ul>
+        <section class="bookshelf-scene">
+            <% if (!books || books.length === 0) { %>
+                <p class="empty-note">No books on the shelf yet. Add one to start your collection.</p>
+            <% } else { %>
+                <ul class="shelf-row" aria-label="Bookshelf">
+                    <% books.forEach(book=> { %>
+                        <li class="shelf-slot">
+                            <a class="book-spine" data-pull-link href="/books/<%=book._id; %>" aria-label="Open <%=book.title; %>">
+                                <span class="spine-status"><%= book.completed ? 'DONE' : 'READING' %></span>
+                                <span class="spine-title"><%=book.title; %></span>
+                                <span class="spine-author"><%= book.author %></span>
+                            </a>
+                            <div class="shelf-actions">
+                                <a class="btn btn-ghost btn-mini" href="/books/<%=book._id %>/edit">Edit</a>
+                                <form action="/books/<%=book.id %>?_method=DELETE" method="POST">
+                                    <input class="btn btn-danger btn-mini" type="submit" value="Delete">
+                                </form>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </section>
     </main>
+
+    <script>
+        const pullLinks = document.querySelectorAll('[data-pull-link]');
+
+        pullLinks.forEach((link) => {
+            link.addEventListener('click', (event) => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                    return;
+                }
+
+                event.preventDefault();
+                link.classList.add('pulling');
+
+                setTimeout(() => {
+                    window.location.href = link.href;
+                }, 220);
+            });
+        });
+    </script>
 
 </body>
 
