@@ -34,14 +34,15 @@
                     <% books.forEach(book=> { %>
                         <li class="shelf-slot">
                             <a
-                                class="book-spine"
+                                class="book-spine <%= book.completed ? 'is-complete' : 'is-reading' %>"
                                 data-book-id="<%=book._id; %>"
                                 data-book-title="<%=book.title; %>"
                                 href="/books/<%=book._id; %>"
                                 aria-label="Open actions for <%=book.title; %>">
-                                <span class="spine-status"><%= book.completed ? 'DONE' : 'READING' %></span>
+                                <% if (!book.completed) { %>
+                                    <span class="reading-dot" aria-hidden="true"></span>
+                                <% } %>
                                 <span class="spine-title"><%=book.title; %></span>
-                                <span class="spine-author"><%= book.author %></span>
                             </a>
                         </li>
                     <% }) %>
