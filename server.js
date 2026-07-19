@@ -56,6 +56,19 @@ app.get('/books', async (req, res) => {
 
 })
 
+app.post('api/users/login', async (req, res) => {
+    try {
+        const foundUser = await User.find(req.body.email)
+        if (!foundUser) {
+            return res.status(400).json({ message: "Incorrect email or password" });
+        }
+
+        const passwordCheck = bcrypt.compare(req.body.password, foundUser.password)
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+})
+
 
 // New
 app.get('/books/new', (req, res) => {
@@ -104,6 +117,7 @@ app.post('/api/users/register', async (req, res) => {
     if (exsitingUser) {
         return res.status(400).json({ error: 'A user with this email already exists' });
     };
+
     try {
         const user = await User.create({ username, email, password })
         console.log(`A new User was created successfully`)
