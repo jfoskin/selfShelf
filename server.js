@@ -95,9 +95,6 @@ app.get('/api/profile', verifyToken, (req, res) => {
     res.json(req.user)
 })
 
-
-
-
 // New
 app.get('/books/new', (req, res) => {
     res.render('new.ejs')
