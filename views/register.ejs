@@ -11,7 +11,7 @@
 </head>
 <body class="site-shell">
     <header class="top-nav wrap">
-        <a class="brand" href="/">ShelfPilot</a>
+        <a class="brand" href="/">SelfShelf</a>
         <nav class="nav-links">
             <a href="/login">Login</a>
             <a href="/books">Books</a>
@@ -24,9 +24,6 @@
             <form id="register-form" class="book-form auth-form" method="POST">
                 <label for="username">Username</label>
                 <input id="username" type="text" name="username" required>
-
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email" required>
 
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" minlength="10" required>
@@ -47,7 +44,6 @@
             const formData = new FormData(registerForm);
             const body = {
                 username: formData.get('username'),
-                email: formData.get('email'),
                 password: formData.get('password')
             };
 

@@ -135,16 +135,16 @@ app.put('/books/:id', async (req, res) => {
 
 app.post('/api/users/register', async (req, res) => {
 
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ username });
 
     if (existingUser) {
-        return res.status(400).json({ error: 'A user with this email already exists' });
+        return res.status(400).json({ error: 'A user with this username already exists' });
     };
 
     try {
-        const user = await User.create({ username, email, password })
+        const user = await User.create({ username, password })
         res.status(201).json({ message: `A new User was created successfully` })
 
     } catch (error) {
@@ -154,16 +154,16 @@ app.post('/api/users/register', async (req, res) => {
 
 app.post('/api/users/login', async (req, res) => {
     try {
-        const foundUser = await User.findOne({ email: req.body.email });
+        const foundUser = await User.findOne({ username: req.body.username });
 
         if (!foundUser) {
-            return res.status(400).json({ message: "Incorrect email or password" });
+            return res.status(400).json({ message: "Incorrect username or password" });
         };
 
         const correctPassword = await foundUser.isCorrectPassword(req.body.password);
 
         if (!correctPassword) {
-            return res.status(400).json({ message: "Incorrect email or password" });
+            return res.status(400).json({ message: "Incorrect username or password" });
         };
 
         const payload = {
