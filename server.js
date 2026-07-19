@@ -4,12 +4,15 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const app = express()
 const PORT = process.env.PORT
 const uri = process.env.DATABASEURL
 
 const Book = require('./models/BookModel')
+const User = require('./models/UserModel')
 
 //Database connection
 
@@ -90,6 +93,28 @@ app.put('/books/:id', async (req, res) => {
 
 
 //Create 
+
+app.post('/api/users/register', async (req, res) => {
+
+    const { username, email, password } = req.body;
+    const saltRounds = 12
+
+    const exsitingUser = await User.findOne({ email });
+
+    if (exsitingUser) {
+        return res.status(400).json({ error: 'A user with this email already exists' });
+    };
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds)
+        const user = User.create({ username, email, password: hashedPassword })
+        console.log(`A new User was created successfully`)
+
+
+    } catch {
+        res.status(400).json(error.message)
+    }
+
+})
 
 app.post('/books', (req, res) => {
     // Checking for completed "checke off" book.
