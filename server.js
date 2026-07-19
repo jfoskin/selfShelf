@@ -97,7 +97,7 @@ app.put('/books/:id', async (req, res) => {
 app.post('/api/users/register', async (req, res) => {
 
     const { username, email, password } = req.body;
-    const saltRounds = 12
+
 
     const exsitingUser = await User.findOne({ email });
 
@@ -105,8 +105,7 @@ app.post('/api/users/register', async (req, res) => {
         return res.status(400).json({ error: 'A user with this email already exists' });
     };
     try {
-        const hashedPassword = await bcrypt.hash(password, saltRounds)
-        const user = User.create({ username, email, password: hashedPassword })
+        const user = User.create({ username, email, password })
         console.log(`A new User was created successfully`)
 
 
