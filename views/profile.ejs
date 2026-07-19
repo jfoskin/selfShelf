@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="site-shell">
+    <header class="top-nav wrap">
+        <a class="brand" href="/">ShelfPilot</a>
+        <nav class="nav-links">
+            <a href="/books">Books</a>
+            <a href="/login" id="logout-link">Logout</a>
+        </nav>
+    </header>
+
+    <main class="wrap stack">
+        <section class="page-head">
+            <p class="eyebrow">Account</p>
+            <h1>Your Profile</h1>
+        </section>
+
+        <section class="auth-card">
+            <p id="profile-message" class="auth-message" aria-live="polite"></p>
+            <div id="profile-details" hidden>
+                <p><strong>User ID:</strong> <span id="user-id"></span></p>
+                <p><strong>Username:</strong> <span id="username"></span></p>
+            </div>
+            <a class="btn btn-ghost" href="/books">Go to Library</a>
+        </section>
+    </main>
+
+    <script>
+        const profileMessage = document.getElementById('profile-message');
+        const profileDetails = document.getElementById('profile-details');
+        const userId = document.getElementById('user-id');
+        const username = document.getElementById('username');
+        const logoutLink = document.getElementById('logout-link');
+
+        logoutLink.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+        });
+
+        const loadProfile = async () => {
+            const token = localStorage.getItem('authToken');
+
+            if (!token) {
+                profileMessage.textContent = 'No token found. Please login first.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/profile', {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    profileMessage.textContent = data.message || 'Unable to load profile.';
+                    return;
+                }
+
+                profileMessage.textContent = 'Authenticated successfully.';
+                userId.textContent = data._id;
+                username.textContent = data.username;
+                profileDetails.hidden = false;
+            } catch (error) {
+                profileMessage.textContent = 'Unable to load profile right now.';
+            }
+        };
+
+        loadProfile();
+    </script>
+</body>
+</html>

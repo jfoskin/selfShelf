@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
     <header class="top-nav wrap">
         <a class="brand" href="/">ShelfPilot</a>
         <nav class="nav-links">
-            <a href="/login">Login</a>
+            <a href="/register">Register</a>
             <a href="/books">Books</a>
         </nav>
     </header>
@@ -21,42 +21,38 @@
     <main class="wrap stack">
         <section class="page-head">
             <p class="eyebrow">Auth</p>
-            <h1>Create Your Account</h1>
+            <h1>Login</h1>
         </section>
 
         <section class="auth-card">
-            <form id="register-form" class="book-form auth-form" method="POST">
-                <label for="username">Username</label>
-                <input id="username" type="text" name="username" required>
-
+            <form id="login-form" class="book-form auth-form" method="POST">
                 <label for="email">Email</label>
                 <input id="email" type="email" name="email" required>
 
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" minlength="10" required>
+                <input id="password" type="password" name="password" required>
 
-                <button class="btn btn-primary" type="submit">Register</button>
+                <button class="btn btn-primary" type="submit">Login</button>
             </form>
-            <p id="register-message" class="auth-message" aria-live="polite"></p>
+            <p id="login-message" class="auth-message" aria-live="polite"></p>
         </section>
     </main>
 
     <script>
-        const registerForm = document.getElementById('register-form');
-        const registerMessage = document.getElementById('register-message');
+        const loginForm = document.getElementById('login-form');
+        const loginMessage = document.getElementById('login-message');
 
-        registerForm.addEventListener('submit', async (event) => {
+        loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const formData = new FormData(registerForm);
+            const formData = new FormData(loginForm);
             const body = {
-                username: formData.get('username'),
                 email: formData.get('email'),
                 password: formData.get('password')
             };
 
             try {
-                const response = await fetch('/api/users/register', {
+                const response = await fetch('/api/users/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
@@ -65,14 +61,14 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    registerMessage.textContent = data.error || 'Registration failed';
+                    loginMessage.textContent = data.message || 'Login failed';
                     return;
                 }
 
-                registerMessage.textContent = 'Account created. Redirecting to login...';
-                window.location.assign('/login');
+                localStorage.setItem('authToken', data.token);
+                window.location.assign('/profile');
             } catch (error) {
-                registerMessage.textContent = 'Unable to register right now.';
+                loginMessage.textContent = 'Unable to login right now.';
             }
         });
     </script>

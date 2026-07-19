@@ -265,6 +265,33 @@ body.site-shell {
     background: #fff;
 }
 
+.book-form input[type="email"],
+.book-form input[type="password"] {
+    width: 100%;
+    font: inherit;
+    border: 2px solid var(--line);
+    padding: 0.6rem;
+    background: #fff;
+}
+
+.auth-card {
+    max-width: 560px;
+    background: var(--card);
+    border: 2px solid var(--line);
+    box-shadow: 6px 6px 0 var(--line);
+    padding: 1rem;
+}
+
+.auth-form {
+    max-width: none;
+}
+
+.auth-message {
+    margin: 0.8rem 0 0;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+}
+
 .check-row {
     display: flex;
     align-items: center;

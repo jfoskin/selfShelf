@@ -29,6 +29,7 @@ db.on('disconnected', () => console.log(`Database has disconnected`));
 //Middleware
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
@@ -59,6 +60,18 @@ const verifyToken = (req, res, next) => {
 //Home
 app.get('/', (req, res) => {
     res.status(200).render("home.ejs");
+});
+
+app.get('/register', (req, res) => {
+    res.render('register.ejs');
+});
+
+app.get('/login', (req, res) => {
+    res.render('login.ejs');
+});
+
+app.get('/profile', (req, res) => {
+    res.render('profile.ejs');
 });
 
 
@@ -127,9 +140,9 @@ app.post('/api/users/register', async (req, res) => {
 
     const { username, email, password } = req.body;
 
-    const exsitingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-    if (exsitingUser) {
+    if (existingUser) {
         return res.status(400).json({ error: 'A user with this email already exists' });
     };
 
