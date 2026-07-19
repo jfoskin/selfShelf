@@ -50,8 +50,8 @@ const verifyToken = (req, res, next) => {
         req.user = decoded
 
         next()
-    } catch {
-        res.status(401).json({ message: `Invalid token` })
+    } catch (error) {
+        res.status(401).json({ error: error.message })
     }
 }
 
@@ -148,7 +148,7 @@ app.post('/api/users/register', async (req, res) => {
         res.status(201).json({ message: `A new User was created successfully` })
 
     } catch (error) {
-        res.status(400).json(error.message)
+        res.status(400).json({ error: error.message })
     }
 })
 
@@ -174,7 +174,7 @@ app.post('/api/users/login', async (req, res) => {
         res.json({ token })
 
     } catch (error) {
-        res.status(400).json(error.message)
+        res.status(400).json({ error: error.message })
     }
 });
 
