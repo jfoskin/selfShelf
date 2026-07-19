@@ -105,11 +105,11 @@ app.post('/api/users/register', async (req, res) => {
         return res.status(400).json({ error: 'A user with this email already exists' });
     };
     try {
-        const user = User.create({ username, email, password })
+        const user = await User.create({ username, email, password })
         console.log(`A new User was created successfully`)
 
 
-    } catch {
+    } catch (error) {
         res.status(400).json(error.message)
     }
 
