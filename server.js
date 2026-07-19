@@ -1,45 +1,44 @@
 // Dependencies
 
-require('dotenv').config()
-const express = require('express')
-const mongoose = require('mongoose')
-const methodOverride = require('method-override')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const jwt = require('jsonwebtoken');
 
-const app = express()
-const PORT = process.env.PORT
-const uri = process.env.DATABASEURL
-const secret = process.env.JWTSECRET
-const expiration = process.env.EXPIRE
+const app = express();
+const PORT = process.env.PORT;
+const uri = process.env.DATABASEURL;
+const secret = process.env.JWTSECRET;
+const expiration = process.env.EXPIRE;
 
-const Book = require('./models/BookModel')
-const User = require('./models/UserModel')
+const Book = require('./models/BookModel');
+const User = require('./models/UserModel');
 
 //Database connection
 
-mongoose.connect(uri)
+mongoose.connect(uri);
 
-const db = mongoose.connection
+const db = mongoose.connection;
 
-db.on('error', (error) => console.log(error.message, `Database has an error`))
-db.on('connected', () => console.log(`Database has successfully connected`))
-db.on('disconnected', () => console.log(`Database has disconnected`))
+db.on('error', (error) => console.log(error.message, `Database has an error`));
+db.on('connected', () => console.log(`Database has successfully connected`));
+db.on('disconnected', () => console.log(`Database has disconnected`));
 
 
 //Middleware
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.set("view engine", "ejs")
-app.use(methodOverride('_method'))
+app.set("view engine", "ejs");
+app.use(methodOverride('_method'));
 
 //Routes
 
 //Home
 app.get('/', (req, res) => {
-    res.status(200).render("home.ejs")
-})
+    res.status(200).render("home.ejs");
+});
 
 
 // Index
@@ -53,29 +52,29 @@ app.get('/books', async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        res.status(500).send(`There was an error getting all books`)
-    }
+        res.status(500).send(`There was an error getting all books`);
+    };
 
-})
+});
 
 app.post('/api/users/login', async (req, res) => {
     try {
-        const foundUser = await User.findOne({ email: req.body.email })
-        const correctPassword = await foundUser.isCorrectPassword(req.body.password)
-        const payload = {
-            _id: foundUser._id,
-            username: foundUser.username
-        }
+        const foundUser = await User.findOne({ email: req.body.email });
 
         if (!foundUser) {
             return res.status(400).json({ message: "Incorrect email or password" });
-        }
+        };
 
+        const correctPassword = await foundUser.isCorrectPassword(req.body.password);
 
         if (!correctPassword) {
             return res.status(400).json({ message: "Incorrect email or password" });
-        }
+        };
 
+        const payload = {
+            _id: foundUser._id,
+            username: foundUser.username
+        };
         const token = jwt.sign(payload, secret, { expiresIn: expiration })
         res.json({ token })
 
@@ -126,7 +125,6 @@ app.post('/api/users/register', async (req, res) => {
 
     const { username, email, password } = req.body;
 
-
     const exsitingUser = await User.findOne({ email });
 
     if (exsitingUser) {
@@ -135,8 +133,7 @@ app.post('/api/users/register', async (req, res) => {
 
     try {
         const user = await User.create({ username, email, password })
-        console.log(`A new User was created successfully`)
-
+        res.status(201).json({ message: `A new User was created successfully` })
 
     } catch (error) {
         res.status(400).json(error.message)
