@@ -292,6 +292,17 @@ body.site-shell {
     font-family: "IBM Plex Mono", monospace;
 }
 
+.auth-main {
+    min-height: calc(100vh - 110px);
+    display: grid;
+    align-items: center;
+}
+
+.auth-card-centered {
+    margin: 0 auto;
+    width: min(560px, 100%);
+}
+
 .check-row {
     display: flex;
     align-items: center;
