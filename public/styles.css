@@ -292,6 +292,13 @@ body.site-shell {
     font-family: "IBM Plex Mono", monospace;
 }
 
+.form-hint {
+    margin: -0.1rem 0 0.35rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-family: "IBM Plex Mono", monospace;
+}
+
 .auth-title {
     margin: 0 0 0.75rem;
     line-height: 1.1;

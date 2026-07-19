@@ -26,7 +26,8 @@
                 <input id="username" type="text" name="username" required>
 
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" minlength="10" required>
+                <input id="password" type="password" name="password" minlength="10" pattern="(?=.*[A-Za-z])(?=.*\d).{10,}" title="Password must be at least 10 characters and include at least one letter and one number." required>
+                <p id="password-help" class="form-hint">Use at least 10 characters with at least one letter and one number.</p>
 
                 <button class="btn btn-primary" type="submit">Register</button>
             </form>
@@ -37,9 +38,47 @@
     <script>
         const registerForm = document.getElementById('register-form');
         const registerMessage = document.getElementById('register-message');
+        const passwordInput = document.getElementById('password');
+
+        const getPasswordError = (password) => {
+            if (password.length < 10) {
+                return 'Password must be at least 10 characters long.';
+            }
+
+            if (!/[A-Za-z]/.test(password)) {
+                return 'Password must include at least one letter.';
+            }
+
+            if (!/\d/.test(password)) {
+                return 'Password must include at least one number.';
+            }
+
+            return '';
+        };
+
+        const validatePassword = () => {
+            const passwordError = getPasswordError(passwordInput.value);
+            passwordInput.setCustomValidity(passwordError);
+            return passwordError;
+        };
+
+        passwordInput.addEventListener('input', () => {
+            const passwordError = validatePassword();
+            registerMessage.textContent = passwordError;
+        });
 
         registerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+
+            const passwordError = validatePassword();
+
+            if (passwordError) {
+                registerMessage.textContent = passwordError;
+                passwordInput.reportValidity();
+                return;
+            }
+
+            registerMessage.textContent = '';
 
             const formData = new FormData(registerForm);
             const body = {
