@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    id: { typre: String, required: true },
+    _id: { typre: String, required: true },
     username: { typre: String, required: true },
     password: { type: String, required: true, minLength: 10 },
-
+    email: { type: String, required: true, unique: true, match: [/.+@.+\..+/, "Must match an email address!"], }
 })
 
 userSchema.pre('save', async (next) => {

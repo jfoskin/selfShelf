@@ -10,6 +10,8 @@ const jwt = require('jsonwebtoken')
 const app = express()
 const PORT = process.env.PORT
 const uri = process.env.DATABASEURL
+const secret = process.env.JWTSECRET
+const expiration = process.env.EXPIRE
 
 const Book = require('./models/BookModel')
 const User = require('./models/UserModel')
@@ -56,14 +58,27 @@ app.get('/books', async (req, res) => {
 
 })
 
-app.post('api/users/login', async (req, res) => {
+app.post('/api/users/login', async (req, res) => {
     try {
-        const foundUser = await User.find(req.body.email)
+        const foundUser = await User.findOne({ email: req.body.email })
+        const correctPassword = await foundUser.isCorrectPassword(req.body.password)
+        const payload = {
+            _id: foundUser._id,
+            username: foundUser.username
+        }
+
         if (!foundUser) {
             return res.status(400).json({ message: "Incorrect email or password" });
         }
 
-        const passwordCheck = bcrypt.compare(req.body.password, foundUser.password)
+
+        if (!correctPassword) {
+            return res.status(400).json({ message: "Incorrect email or password" });
+        }
+
+        const token = jwt.sign(payload, secret, { expiresIn: expiration })
+        res.json({ token })
+
     } catch (error) {
         res.status(400).json(error.message)
     }
