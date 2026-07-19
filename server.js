@@ -33,6 +33,27 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
 
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization
+
+    if (!authHeader) {
+        return res.status(401).json({ message: `Missing token` })
+    }
+
+    const token = authHeader.split(' ').pop().trim()
+
+    try {
+
+        const decoded = jwt.verify(token, secret)
+
+        req.user = decoded
+
+        next()
+    } catch {
+        res.status(401).json({ message: `Invalid token` })
+    }
+}
+
 //Routes
 
 //Home
@@ -57,31 +78,11 @@ app.get('/books', async (req, res) => {
 
 });
 
-app.post('/api/users/login', async (req, res) => {
-    try {
-        const foundUser = await User.findOne({ email: req.body.email });
-
-        if (!foundUser) {
-            return res.status(400).json({ message: "Incorrect email or password" });
-        };
-
-        const correctPassword = await foundUser.isCorrectPassword(req.body.password);
-
-        if (!correctPassword) {
-            return res.status(400).json({ message: "Incorrect email or password" });
-        };
-
-        const payload = {
-            _id: foundUser._id,
-            username: foundUser.username
-        };
-        const token = jwt.sign(payload, secret, { expiresIn: expiration })
-        res.json({ token })
-
-    } catch (error) {
-        res.status(400).json(error.message)
-    }
+app.get('/api/profile', verifyToken, (req, res) => {
+    res.json(req.user)
 })
+
+
 
 
 // New
@@ -98,7 +99,8 @@ app.delete('/books/:id', async (req, res) => {
         console.log(error)
         res.status(500).send(`Error deleting book`)
     }
-})
+});
+
 // Update
 app.put('/books/:id', async (req, res) => {
 
@@ -138,8 +140,33 @@ app.post('/api/users/register', async (req, res) => {
     } catch (error) {
         res.status(400).json(error.message)
     }
-
 })
+
+app.post('/api/users/login', async (req, res) => {
+    try {
+        const foundUser = await User.findOne({ email: req.body.email });
+
+        if (!foundUser) {
+            return res.status(400).json({ message: "Incorrect email or password" });
+        };
+
+        const correctPassword = await foundUser.isCorrectPassword(req.body.password);
+
+        if (!correctPassword) {
+            return res.status(400).json({ message: "Incorrect email or password" });
+        };
+
+        const payload = {
+            _id: foundUser._id,
+            username: foundUser.username
+        };
+        const token = jwt.sign(payload, secret, { expiresIn: expiration })
+        res.json({ token })
+
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+});
 
 app.post('/books', (req, res) => {
     // Checking for completed "checke off" book.
