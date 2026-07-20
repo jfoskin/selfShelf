@@ -6,14 +6,12 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true, minLength: 10 },
 })
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
 
     if (this.isNew || this.isModified("password")) {
         const saltRounds = 12;
         this.password = await bcrypt.hash(this.password, saltRounds);
     }
-
-    next()
 })
 
 userSchema.methods.isCorrectPassword = async function (password) {
