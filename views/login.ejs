@@ -61,7 +61,7 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    loginMessage.textContent = data.message || 'Login failed';
+                    loginMessage.textContent = data.error || 'Login failed';
                     return;
                 }
 

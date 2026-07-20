@@ -63,7 +63,7 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    profileMessage.textContent = data.message || 'Unable to load profile.';
+                    profileMessage.textContent = data.error || 'Unable to load profile.';
                     return;
                 }
 

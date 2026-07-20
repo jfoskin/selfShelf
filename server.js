@@ -38,7 +38,7 @@ const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization
 
     if (!authHeader) {
-        return res.status(401).json({ message: `Missing token` })
+        return res.status(401).json({ error: `Missing token` })
     }
 
     const token = authHeader.split(' ').pop().trim()
@@ -51,7 +51,7 @@ const verifyToken = (req, res, next) => {
 
         next()
     } catch (error) {
-        res.status(401).json({ error: error.message })
+        res.status(401).json({ error: 'Invalid token' })
     }
 }
 
@@ -157,13 +157,13 @@ app.post('/api/users/login', async (req, res) => {
         const foundUser = await User.findOne({ username: req.body.username });
 
         if (!foundUser) {
-            return res.status(400).json({ message: "Incorrect username or password" });
+            return res.status(400).json({ error: "Incorrect username or password" });
         };
 
         const correctPassword = await foundUser.isCorrectPassword(req.body.password);
 
         if (!correctPassword) {
-            return res.status(400).json({ message: "Incorrect username or password" });
+            return res.status(400).json({ error: "Incorrect username or password" });
         };
 
         const payload = {
@@ -174,7 +174,7 @@ app.post('/api/users/login', async (req, res) => {
         res.json({ token })
 
     } catch (error) {
-        res.status(400).json({ error: error.message })
+        res.status(500).json({ error: 'Unable to login right now.' })
     }
 });
 
