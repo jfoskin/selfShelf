@@ -91,8 +91,18 @@ app.get('/books', async (req, res) => {
 
 });
 
-app.get('/api/profile', verifyToken, (req, res) => {
-    res.json(req.user)
+app.get('/api/profile', verifyToken, async (req, res) => {
+    try {
+        const currentBook = await Book.findOne({ completed: false }).sort({ date: -1 }).lean();
+
+        res.json({
+            _id: req.user._id,
+            username: req.user.username,
+            currentBook
+        })
+    } catch (error) {
+        res.status(500).json({ error: 'Unable to load profile right now.' })
+    }
 })
 
 // New

@@ -29,6 +29,7 @@
             <div id="profile-details" hidden>
                 <p><strong>User ID:</strong> <span id="user-id"></span></p>
                 <p><strong>Username:</strong> <span id="username"></span></p>
+                <p><strong>Current Book:</strong> <span id="current-book"></span></p>
             </div>
             <a class="btn btn-ghost" href="/books">Go to Library</a>
         </section>
@@ -39,6 +40,7 @@
         const profileDetails = document.getElementById('profile-details');
         const userId = document.getElementById('user-id');
         const username = document.getElementById('username');
+        const currentBook = document.getElementById('current-book');
         const logoutLink = document.getElementById('logout-link');
 
         logoutLink.addEventListener('click', () => {
@@ -70,6 +72,11 @@
                 profileMessage.textContent = 'Authenticated successfully.';
                 userId.textContent = data._id;
                 username.textContent = data.username;
+                if (data.currentBook) {
+                    currentBook.textContent = `${data.currentBook.title} by ${data.currentBook.author}`;
+                } else {
+                    currentBook.textContent = 'No current book is being read.';
+                }
                 profileDetails.hidden = false;
             } catch (error) {
                 profileMessage.textContent = 'Unable to load profile right now.';
